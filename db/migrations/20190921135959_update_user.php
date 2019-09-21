@@ -1,9 +1,8 @@
 <?php
 
 use Phinx\Migration\AbstractMigration;
-use Phinx\Db\Adapter\MysqlAdapter;
 
-class Internships extends AbstractMigration
+class UpdateUser extends AbstractMigration
 {
     /**
      * Change Method.
@@ -32,12 +31,16 @@ class Internships extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('internships');
-        $table->addColumn('employer_id','integer',['null' => false])
-            ->addForeignKey('employer_id','employer','id',['delete' => 'CASCADE', 'update' => 'NO_ACTION'])
-            ->addColumn('name','string',['limit' => 50])
-            ->addColumn('description','text',['limit' => MysqlAdapter::TEXT_LONG])
-            ->addColumn('internship_specific_questions', 'string', ['limit' => 100, 'null' => true])
-            ->create();
+        $user_table = $this->table('users');
+        $session_table = $this->table('sessions',['id' => 'session_id']);
+
+        $user_table->addColumn('password','string',['limit' =>  256])
+                ->update();
+        $session_table->addColumn('user_id', 'integer',['null' => false])
+                ->addColumn('session_cookie','char',['limit' => 32])
+                ->addIndex(['session_cookie'],['unique' => true])
+                ->addTimestampsWithTimezone(null,'session_start')
+                ->create();
+                
     }
 }

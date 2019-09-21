@@ -39,11 +39,13 @@ class Users extends AbstractMigration
         $users_table->addColumn('username','string',['limit' => 50])
                 ->addColumn('role','string', ['limit' => 30])
                 ->create();
-        $student_table->addForeignKey('id','users','id',['delete' => 'CASCADE', 'update' => 'CASCADE'])
+        $student_table->addColumn('user_id','integer',['null' => false])
+                    ->addForeignKey('user_id','users','id',['delete' => 'CASCADE', 'update' => 'NO_ACTION'])
                     ->addColumn('school','string',['limit' => 100])
                     ->addColumn('resume', 'blob', ['limit' => MysqlAdapter::BLOB_MEDIUM])
                     ->create();
-        $employer_table->addForeignKey('id','users','id',['delete' => 'CASCADE', 'update' => 'CASCADE'])
+        $employer_table->addColumn('user_id','integer',['null' => false])
+                    ->addForeignKey('user_id','users','id',['delete' => 'CASCADE', 'update' => 'NO_ACTION'])
                     ->addColumn('name', 'string',['limit' => 50])
                     ->addColumn('about','text',['limit' => MysqlAdapter::TEXT_LONG])
                     ->create();

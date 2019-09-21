@@ -3,7 +3,8 @@
 use Phinx\Migration\AbstractMigration;
 use Phinx\Db\Adapter\MysqlAdapter;
 
-class Internships extends AbstractMigration
+
+class StudentApplication extends AbstractMigration
 {
     /**
      * Change Method.
@@ -32,12 +33,14 @@ class Internships extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('internships');
-        $table->addColumn('employer_id','integer',['null' => false])
-            ->addForeignKey('employer_id','employer','id',['delete' => 'CASCADE', 'update' => 'NO_ACTION'])
-            ->addColumn('name','string',['limit' => 50])
-            ->addColumn('description','text',['limit' => MysqlAdapter::TEXT_LONG])
-            ->addColumn('internship_specific_questions', 'string', ['limit' => 100, 'null' => true])
+        $table = $this->table('student_applications');
+
+        $table->addColumn('student_id','integer',['null' => false])
+            ->addColumn('internship_id', 'integer', ['null' => false])
+            ->addForeignKey('student_id', 'student', 'id', ['delete' => 'CASCADE', 'update' => 'NO_ACTION'])
+            ->addColumn('time_of_availablity', 'integer')
+            ->addColumn('internship_specific', 'text', ['limit' => MysqlAdapter::TEXT_MEDIUM, 'null' => true])
+            ->addColumn('student_resume', 'blob', ['limit' => MysqlAdapter::BLOB_LONG])
             ->create();
     }
 }
