@@ -84,7 +84,7 @@
                 return TRUE;
             
             $sql = 'SELECT * FROM users WHERE (username = ?)';
-            $res = $this->db->get_result($sql, array($name);
+            $res = $this->db->get_result($sql, array($name));
             if(res)
             {
                 if(password_verify($password, $res['password']))
@@ -167,7 +167,7 @@
 
                 return TRUE;
             }
+            return FALSE;
         }
-        return FALSE;
     }
 ?>
