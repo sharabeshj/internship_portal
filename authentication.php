@@ -68,7 +68,7 @@
             return FALSE;
         }
 
-        public function __construct(&$db)
+        public function __construct()
         {
             $this->user_id = NULL;
             $this->username = NULL;
@@ -81,7 +81,7 @@
         public function login($name, $password) 
         {
             if((mb_strlen($password) < 3) || (mb_strlen($password) > 24))
-                return TRUE;
+                return FALSE;
             
             $sql = 'SELECT * FROM users WHERE (username = ?)';
             $res = $this->db->get_result($sql, array($name));
@@ -107,12 +107,12 @@
             {
                 if(mb_strlen($_COOKIE[self::cookie_name]) < 1)
                 {
-                    return TRUE;
+                    return FALSE;
                 }
 
                 $auth_sql = 'SELECT *,UNIX_TIMESTAMP(session_start) AS session_start_ts FROM ,users where (session_cookie = ?) AND (users.id = user_id)';
                 $cookie_md5 = md5($_COOKIE[self::cookie_name]);
-                $res = $this->db->getResult($sql, array($cookie_md5));
+                $res = $this->db->getResult($auth_sql, array($cookie_md5));
                 if($res)
                 {
                     $this->user_id = $res['user_id'];

@@ -57,11 +57,15 @@ class Route{
                     if($basepath != '' && $basepath != '/'){
                         array_shift($matches);
                     }
-
-                    if(!call_user_func_array($route['function'], $matches)){
+                    
+                    try
+                    {
+                        call_user_func_array($route['function'], $matches);
+                        $route_match_found = TRUE;
                         break;
-                    }else{
-                        $route_match_found = true;
+                    }
+                    catch(Exception $e)
+                    {
                         break;
                     }
                 }
@@ -69,7 +73,7 @@ class Route{
         }
 
         if(!$route_match_found){
-            if(!$path_match_found){
+            if($path_match_found){
                 header("HTTP/1.0 405 Method Not Allowed");
                 if(self::$methodNotAllowed){
                     call_user_func_array(self::$methodNotAllowed, Array($path, $method));
@@ -82,5 +86,11 @@ class Route{
             }
         }
     }
+
+    public static function redirect($url, $permanent = FALSE)
+    {
+        header('Location: '.$url, true, $permanent ? 301 : 302);
+        exit();
+    } 
 }
 ?>

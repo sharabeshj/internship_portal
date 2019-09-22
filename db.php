@@ -1,5 +1,5 @@
 <?php 
-    include('config.php');
+    include('./config.php');
     class db extends mysqli {
         private static $instance = null;
 
@@ -12,7 +12,7 @@
             if (!self::$instance instanceof self) {
                 self::$instance = new self;
             }
-                return self::instance;
+                return self::$instance;
         }
 
         public function __close() {
@@ -23,7 +23,7 @@
         }
 
         private function __construct() {
-            parent::__construct($this->$dbHost, $this->$user, $this->$password, $this->dbName);
+            parent::__construct($this->dbHost, $this->user, $this->password, $this->dbName);
             if(mysqli_connect_error()) {
                 exit('Connect Error ('. mysqli_connect_errno . ') '.mysqli_connect_error());
             }
